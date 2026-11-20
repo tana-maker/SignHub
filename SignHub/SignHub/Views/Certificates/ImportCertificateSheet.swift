@@ -20,9 +20,7 @@ public struct ImportCertificateSheet: View {
     @State private var provFileName: String?
     @State private var provData: Data?
     
-    @State private var isShowingPairPicker: Bool = false
-    @State private var isShowingP12Picker: Bool = false
-    @State private var isShowingProvPicker: Bool = false
+    @State private var isShowingPicker: Bool = false
     @State private var isImporting: Bool = false
     @State private var errorMessage: String?
     
@@ -32,54 +30,77 @@ public struct ImportCertificateSheet: View {
                 Section {
                     // Quick Import Both Pair
                     Button {
-                        isShowingPairPicker = true
+                        isShowingPicker = true
                     } label: {
                         HStack {
                             Image(systemName: "square.and.arrow.down.on.square.fill")
+                                .font(.system(size: 18))
                                 .foregroundColor(appState.currentAccentColor)
-                            Text("Select Both Files Together (.p12 & .mobileprovision)")
-                                .font(.system(size: 14, weight: .semibold))
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Select Files (.p12 & .mobileprovision)")
+                                    .font(.system(size: 15, weight: .semibold))
+                                    .foregroundColor(.primary)
+                                Text("Choose both files together or one by one")
+                                    .font(.system(size: 12))
+                                    .foregroundColor(.secondary)
+                            }
                             Spacer()
                             Image(systemName: "chevron.right")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                         }
+                        .padding(.vertical, 4)
                     }
+                    .buttonStyle(.borderless)
                     
-                    // P12 File Picker
+                    // P12 File Picker Row
                     HStack {
+                        Image(systemName: p12Data != nil ? "checkmark.circle.fill" : "doc.badge.key")
+                            .font(.system(size: 20))
+                            .foregroundColor(p12Data != nil ? .green : appState.currentAccentColor)
+                        
                         VStack(alignment: .leading, spacing: 2) {
                             Text(".p12 Certificate")
                                 .font(.system(size: 15, weight: .semibold))
-                            Text(p12FileName ?? "Select .p12 or .pfx file")
+                            Text(p12FileName ?? "Tap to browse .p12 or .pfx file")
                                 .font(.system(size: 13))
-                                .foregroundColor(p12Data == nil ? .secondary : .primary)
+                                .foregroundColor(p12Data == nil ? .secondary : .green)
                         }
                         Spacer()
-                        Button {
-                            isShowingP12Picker = true
-                        } label: {
-                            Text(p12Data == nil ? "Browse" : "Change")
-                                .font(.system(size: 13, weight: .semibold))
+                        Button(p12Data == nil ? "Browse" : "Change") {
+                            isShowingPicker = true
                         }
+                        .font(.system(size: 13, weight: .semibold))
+                        .buttonStyle(.borderless)
+                    }
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        isShowingPicker = true
                     }
                     
-                    // Provision Picker
+                    // Provision Picker Row
                     HStack {
+                        Image(systemName: provData != nil ? "checkmark.circle.fill" : "doc.text.fill")
+                            .font(.system(size: 20))
+                            .foregroundColor(provData != nil ? .green : appState.currentAccentColor)
+                        
                         VStack(alignment: .leading, spacing: 2) {
                             Text(".mobileprovision Profile")
                                 .font(.system(size: 15, weight: .semibold))
-                            Text(provFileName ?? "Select provisioning profile")
+                            Text(provFileName ?? "Tap to browse provisioning profile")
                                 .font(.system(size: 13))
-                                .foregroundColor(provData == nil ? .secondary : .primary)
+                                .foregroundColor(provData == nil ? .secondary : .green)
                         }
                         Spacer()
-                        Button {
-                            isShowingProvPicker = true
-                        } label: {
-                            Text(provData == nil ? "Browse" : "Change")
-                                .font(.system(size: 13, weight: .semibold))
+                        Button(provData == nil ? "Browse" : "Change") {
+                            isShowingPicker = true
                         }
+                        .font(.system(size: 13, weight: .semibold))
+                        .buttonStyle(.borderless)
+                    }
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        isShowingPicker = true
                     }
                 } header: {
                     Text("Certificate Files")
@@ -126,7 +147,7 @@ public struct ImportCertificateSheet: View {
                 }
             }
             .fileImporter(
-                isPresented: $isShowingPairPicker,
+                isPresented: $isShowingPicker,
                 allowedContentTypes: [.item],
                 allowsMultipleSelection: true
             ) { result in
@@ -134,22 +155,6 @@ public struct ImportCertificateSheet: View {
                     for url in urls {
                         handlePickedFile(url: url)
                     }
-                }
-            }
-            .fileImporter(
-                isPresented: $isShowingP12Picker,
-                allowedContentTypes: [.item]
-            ) { result in
-                if case .success(let url) = result {
-                    handlePickedFile(url: url)
-                }
-            }
-            .fileImporter(
-                isPresented: $isShowingProvPicker,
-                allowedContentTypes: [.item]
-            ) { result in
-                if case .success(let url) = result {
-                    handlePickedFile(url: url)
                 }
             }
         }
