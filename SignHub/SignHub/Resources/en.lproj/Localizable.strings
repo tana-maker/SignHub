@@ -1,0 +1,47 @@
+/* English Localizable.strings - SignHub */
+
+"tab.apps" = "Apps";
+"tab.sources" = "Sources";
+"tab.files" = "Files";
+"tab.downloads" = "Downloads";
+"tab.settings" = "Settings";
+"tab.signed" = "Signed Apps";
+
+"action.get" = "GET";
+"action.sign" = "Sign";
+"action.install" = "Install";
+"action.open" = "Open";
+"action.cancel" = "Cancel";
+"action.done" = "Done";
+"action.delete" = "Delete";
+"action.share" = "Share";
+"action.rename" = "Rename";
+"action.import" = "Import";
+"action.retry" = "Retry";
+"action.pause" = "Pause";
+"action.resume" = "Resume";
+"action.clear" = "Clear";
+
+"cert.title" = "Certificates";
+"cert.import_prompt" = "Import .p12 and .mobileprovision";
+"cert.default" = "Default";
+"cert.status.valid" = "Valid";
+"cert.status.expiring" = "Expiring Soon";
+"cert.status.expired" = "Expired";
+
+"signing.title" = "Sign Application";
+"signing.options" = "Signing Options";
+"signing.app_name" = "App Display Name";
+"signing.bundle_id" = "Bundle Identifier";
+"signing.version" = "App Version";
+"signing.inject_dylib" = "Inject Dylibs / Frameworks";
+"signing.remove_extensions" = "Remove App Extensions";
+"signing.remove_supported_devices" = "Remove Device Limits (UISupportedDevices)";
+"signing.file_sharing" = "Enable File Sharing";
+"signing.ipad_fullscreen" = "Enable iPad Fullscreen";
+"signing.start" = "Sign Now";
+
+"install.starting_server" = "Starting secure local server...";
+"install.generating_manifest" = "Generating wireless manifest...";
+"install.triggering_ota" = "Triggering iOS installation prompt...";
+"install.success" = "Follow prompt on your Home Screen to finish install.";

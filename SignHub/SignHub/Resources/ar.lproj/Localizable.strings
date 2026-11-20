@@ -1,0 +1,47 @@
+/* Arabic Localizable.strings - SignHub (دعم كامل للغة العربية) */
+
+"tab.apps" = "التطبيقات";
+"tab.sources" = "المصادر";
+"tab.files" = "الملفات";
+"tab.downloads" = "التنزيلات";
+"tab.settings" = "الإعدادات";
+"tab.signed" = "التطبيقات الموقعة";
+
+"action.get" = "تنزيل";
+"action.sign" = "توقيع";
+"action.install" = "تثبيت";
+"action.open" = "فتح";
+"action.cancel" = "إلغاء";
+"action.done" = "تم";
+"action.delete" = "حذف";
+"action.share" = "مشاركة";
+"action.rename" = "إعادة تسمية";
+"action.import" = "استيراد";
+"action.retry" = "إعادة المحاولة";
+"action.pause" = "إيقاف مؤقت";
+"action.resume" = "استئناف";
+"action.clear" = "مسح";
+
+"cert.title" = "الشهادات";
+"cert.import_prompt" = "استيراد ملف p12 وملف mobileprovision";
+"cert.default" = "افتراضي";
+"cert.status.valid" = "صالحة";
+"cert.status.expiring" = "تنتهي قريباً";
+"cert.status.expired" = "منتهية الصلاحية";
+
+"signing.title" = "توقيع التطبيق";
+"signing.options" = "خيارات التوقيع";
+"signing.app_name" = "اسم التطبيق";
+"signing.bundle_id" = "معرف الحزمة (Bundle ID)";
+"signing.version" = "إصدار التطبيق";
+"signing.inject_dylib" = "حقن مكتبات Dylib / أطر عمل";
+"signing.remove_extensions" = "إزالة إضافات التطبيق (PlugIns)";
+"signing.remove_supported_devices" = "إزالة قيود الأجهزة (UISupportedDevices)";
+"signing.file_sharing" = "تفعيل مشاركة الملفات";
+"signing.ipad_fullscreen" = "تفعيل ملء الشاشة للآيباد";
+"signing.start" = "توقيع الآن";
+
+"install.starting_server" = "جاري تشغيل الخادم المحلي الآمن...";
+"install.generating_manifest" = "جاري إنشاء بيان التثبيت اللاسلكي...";
+"install.triggering_ota" = "جاري إطلاق مطالبة تثبيت iOS...";
+"install.success" = "اتبع المطالبة على الشاشة الرئيسية لإكمال التثبيت.";

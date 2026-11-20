@@ -1,0 +1,51 @@
+ROLE
+You are a senior iOS engineer and UI designer. Build a complete, production-quality iOS/iPadOS app called "SignHub": an IPA library, signer and installer, in the spirit of GBox, E-Sign and K-Sign. Output a full Xcode project (Swift 5.9+, SwiftUI, iOS 16+, iPhone and iPad adaptive layouts).
+
+TECH STACK
+- SwiftUI + MVVM, Swift Concurrency (async/await), SwiftData or Core Data for persistence
+- Networking: URLSession with background download sessions
+- ZIP: ZIPFoundation. Plist/Mach-O handling: native Swift
+- Signing engine: wrap the open-source zsign (C++) via a Swift bridging layer
+- Install engine: local HTTPS server (Vapor or Swifter) serving a manifest.plist and the signed IPA, launched via itms-services://?action=download-manifest&url=...
+- Keychain for storing p12 passwords. Optional Face ID lock via LocalAuthentication
+
+TABS (bottom tab bar on iPhone, sidebar on iPad)
+1. Apps: searchable list/grid of apps from sources and imported IPAs. Shows icon, name, version, size, last updated, and a Get / Sign / Install / Open button with progress ring.
+2. Sources: add by URL or QR code. Supports AltStore-style and Scarlet-style JSON repos. Source detail page, pull-to-refresh, validation, reorder, delete.
+3. Files: imported IPAs with name, size, date. Swipe actions (Sign, Share, Rename, Delete), multi-select Edit mode, import from Files app, share sheet and URL.
+4. Downloads: queue with progress, speed, pause/resume/cancel, background download support, retry on failure, "Add Download" via URL.
+5. Settings: Certificate Management, Face ID lock, appearance, advanced options, cache, About.
+
+CORE FEATURES
+- Certificate Manager: import .p12 plus .mobileprovision, validate password, show team, expiry date, entitlements, device UDID support, and status (valid / expiring / expired). Multiple certs with a default.
+- Signing flow: choose IPA, choose cert, then optional edits before signing:
+  - Change app name, bundle ID, version, and icon
+  - Inject dylibs/frameworks (optional, advanced)
+  - Remove app extensions, remove UISupportedDevices, enable file sharing, enable iPad fullscreen
+  - Live log console during signing
+- Install: sign, then host locally, then trigger OTA install, with a step-by-step progress sheet and clear error messages.
+- Signed Apps page: list of installed apps with certificate expiry countdown, re-sign and refresh actions, and local notifications before expiry.
+- Auto-resign / background refresh using BGTaskScheduler where permitted.
+- IPA inspector: view Info.plist, entitlements, embedded frameworks, minimum iOS.
+- Backup/restore of sources, certs (encrypted) and settings. iCloud sync option.
+- Onboarding tutorial, in-app video tutorial links, and a log exporter.
+- Localization-ready (English first, Arabic/RTL support).
+
+DESIGN
+- Modern, clean, Apple-native look: large titles, SF Pro, SF Symbols, translucent materials (.ultraThinMaterial), rounded cards (20pt radius), soft shadows, subtle spring animations, haptics
+- Floating pill-style tab bar, light/dark mode, accent color picker
+- Skeleton loading states, empty states with illustrations, pull-to-refresh, swipe gestures
+- Accessible: Dynamic Type, VoiceOver labels, minimum 44pt tap targets
+
+DELIVERABLES
+1. Project structure tree
+2. Full source code for every file (Models, ViewModels, Views, Services, Utilities)
+3. Info.plist keys, entitlements, and required capabilities
+4. Step-by-step build and run instructions for Xcode
+5. Unit tests for the signing service and source parser
+6. A README with architecture and known iOS limitations
+
+CONSTRAINTS
+- Only sign with certificates the user provides. Do not bundle or fetch shared/leaked certificates.
+- Handle errors gracefully; no force unwraps; document every public API.
+- Build in phases: (1) architecture + UI shell, (2) sources/downloads/files, (3) cert manager + signing, (4) install engine, (5) polish and tests. Complete each phase fully before moving on.
