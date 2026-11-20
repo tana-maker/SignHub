@@ -19,26 +19,31 @@ jobs:
       - name: Show Xcode Version
         run: xcodebuild -version
 
-      - name: Build iOS Application Archive
+      - name: Build SignHub App Bundle
         run: |
-          xcodebuild archive \
+          xcodebuild build \
             -project SignHub/SignHub.xcodeproj \
             -scheme SignHub \
             -configuration Release \
             -destination 'generic/platform=iOS' \
-            -archivePath build/SignHub.xcarchive \
+            -derivedDataPath build \
             CODE_SIGNING_ALLOWED=NO \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGN_IDENTITY="" \
-            PROVISIONING_PROFILE_SPECIFIER=""
+            CODE_SIGN_ENTITLEMENTS=""
 
       - name: Package Payload into SignHub.ipa
         run: |
           mkdir -p build/Payload
-          cp -r "build/SignHub.xcarchive/Products/Applications/SignHub.app" build/Payload/
+          APP_PATH=$(find build/Build/Products/Release-iphoneos -name "SignHub.app" -type d | head -n 1)
+          if [ -z "$APP_PATH" ]; then
+            APP_PATH=$(find build -name "SignHub.app" -type d | head -n 1)
+          fi
+          echo "Found app bundle at: $APP_PATH"
+          cp -r "$APP_PATH" build/Payload/
           cd build
           zip -r -y "SignHub.ipa" Payload
-          echo "SignHub.ipa packaged successfully."
+          echo "SignHub.ipa created successfully."
 
       - name: Upload IPA Artifact
         uses: actions/upload-artifact@v4

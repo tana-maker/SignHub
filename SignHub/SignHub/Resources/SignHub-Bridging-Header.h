@@ -8,6 +8,6 @@
 #ifndef SignHub_Bridging_Header_h
 #define SignHub_Bridging_Header_h
 
-#import "ZSignBridge.h"
+#import "../Services/Signing/ZSignBridge.h"
 
 #endif /* SignHub_Bridging_Header_h */

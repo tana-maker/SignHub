@@ -986,6 +986,10 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"SignHub/Services/Signing",
+				);
 				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.signhub.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1009,6 +1013,10 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"SignHub/Services/Signing",
 				);
 				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.signhub.app;
