@@ -14,16 +14,12 @@ public struct AboutView: View {
         List {
             Section {
                 VStack(spacing: 12) {
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 22, style: .continuous)
-                            .fill(appState.currentAccentColor.gradient)
-                            .frame(width: 84, height: 84)
-                            .shadow(color: appState.currentAccentColor.opacity(0.35), radius: 12, x: 0, y: 6)
-                        
-                        Image(systemName: "signature")
-                            .font(.system(size: 44, weight: .bold))
-                            .foregroundColor(.white)
-                    }
+                    Image("AppLogo")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 84, height: 84)
+                        .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+                        .shadow(color: appState.currentAccentColor.opacity(0.35), radius: 12, x: 0, y: 6)
                     
                     Text("SignHub")
                         .font(.system(size: 24, weight: .bold))
