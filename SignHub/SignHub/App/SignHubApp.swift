@@ -60,8 +60,8 @@ struct SignHubApp: App {
     // MARK: - Handle Incoming IPA or Repository URL
     
     private func handleIncomingURL(_ url: URL) {
-        // Handled when an IPA is opened via "Open In SignHub" / AirDrop / Safari
-        if url.pathExtension.lowercased() == "ipa" {
+        let ext = url.pathExtension.lowercased()
+        if ext == "ipa" {
             let targetURL = FileManager.default.ipasDirectory.appendingPathComponent(url.lastPathComponent)
             do {
                 if FileManager.default.fileExists(atPath: targetURL.path) {
@@ -70,6 +70,18 @@ struct SignHubApp: App {
                 try FileManager.default.copyItem(at: url, to: targetURL)
                 appState.showToast("Imported \(url.lastPathComponent)", type: .success)
                 appState.selectedTab = .files
+            } catch {
+                appState.showToast("Failed to import file: \(error.localizedDescription)", type: .error)
+            }
+        } else if ext == "p12" || ext == "pfx" || ext == "mobileprovision" {
+            let targetURL = FileManager.default.documentsDirectory.appendingPathComponent(url.lastPathComponent)
+            do {
+                if FileManager.default.fileExists(atPath: targetURL.path) {
+                    try FileManager.default.removeItem(at: targetURL)
+                }
+                try FileManager.default.copyItem(at: url, to: targetURL)
+                appState.showToast("Imported \(url.lastPathComponent)", type: .success)
+                appState.selectedTab = .settings
             } catch {
                 appState.showToast("Failed to import file: \(error.localizedDescription)", type: .error)
             }

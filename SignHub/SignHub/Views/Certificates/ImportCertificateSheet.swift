@@ -7,6 +7,7 @@
 
 import SwiftUI
 import UniformTypeIdentifiers
+import UIKit
 
 public struct ImportCertificateSheet: View {
     @ObservedObject public var viewModel: CertificateManagerViewModel
@@ -24,23 +25,69 @@ public struct ImportCertificateSheet: View {
     @State private var isImporting: Bool = false
     @State private var errorMessage: String?
     
+    private var detectedLocalFiles: (p12: URL?, prov: URL?) {
+        let docs = FileManager.default.documentsDirectory
+        let certsDir = FileManager.default.certificatesDirectory
+        let allURLs = ((try? FileManager.default.contentsOfDirectory(at: docs, includingPropertiesForKeys: nil)) ?? []) +
+                      ((try? FileManager.default.contentsOfDirectory(at: certsDir, includingPropertiesForKeys: nil)) ?? [])
+        
+        let p12 = allURLs.first { ["p12", "pfx"].contains($0.pathExtension.lowercased()) }
+        let prov = allURLs.first { $0.pathExtension.lowercased() == "mobileprovision" }
+        return (p12, prov)
+    }
+    
     public var body: some View {
         NavigationStack {
             Form {
+                if let p12 = detectedLocalFiles.p12, p12Data == nil || provData == nil {
+                    Section {
+                        Button {
+                            handlePickedFile(url: p12)
+                            if let prov = detectedLocalFiles.prov {
+                                handlePickedFile(url: prov)
+                            }
+                        } label: {
+                            HStack {
+                                Image(systemName: "sparkles")
+                                    .font(.system(size: 18))
+                                    .foregroundColor(.orange)
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text("Auto-Detect in SignHub Folder")
+                                        .font(.system(size: 15, weight: .semibold))
+                                        .foregroundColor(.primary)
+                                    Text("Found: \(p12.lastPathComponent)\(detectedLocalFiles.prov != nil ? " & " + (detectedLocalFiles.prov?.lastPathComponent ?? "") : "")")
+                                        .font(.system(size: 12))
+                                        .foregroundColor(.secondary)
+                                }
+                                Spacer()
+                                Text("Auto-Fill")
+                                    .font(.system(size: 13, weight: .bold))
+                                    .foregroundColor(appState.currentAccentColor)
+                            }
+                            .padding(.vertical, 4)
+                        }
+                        .buttonStyle(.borderless)
+                    } header: {
+                        Text("Detected On Device")
+                    } footer: {
+                        Text("You can also copy certificate files into 'Files app > On My iPad > SignHub'.")
+                    }
+                }
+                
                 Section {
-                    // Quick Import Both Pair
+                    // Primary Browse Button
                     Button {
                         isShowingPicker = true
                     } label: {
                         HStack {
                             Image(systemName: "square.and.arrow.down.on.square.fill")
-                                .font(.system(size: 18))
+                                .font(.system(size: 20))
                                 .foregroundColor(appState.currentAccentColor)
                             VStack(alignment: .leading, spacing: 2) {
-                                Text("Select Files (.p12 & .mobileprovision)")
+                                Text("Browse Files (.p12 / .mobileprovision)")
                                     .font(.system(size: 15, weight: .semibold))
                                     .foregroundColor(.primary)
-                                Text("Choose both files together or one by one")
+                                Text("Select .p12, .mobileprovision, or both")
                                     .font(.system(size: 12))
                                     .foregroundColor(.secondary)
                             }
@@ -62,7 +109,7 @@ public struct ImportCertificateSheet: View {
                         VStack(alignment: .leading, spacing: 2) {
                             Text(".p12 Certificate")
                                 .font(.system(size: 15, weight: .semibold))
-                            Text(p12FileName ?? "Tap to browse .p12 or .pfx file")
+                            Text(p12FileName ?? "Select or drag .p12 file here")
                                 .font(.system(size: 13))
                                 .foregroundColor(p12Data == nil ? .secondary : .green)
                         }
@@ -87,7 +134,7 @@ public struct ImportCertificateSheet: View {
                         VStack(alignment: .leading, spacing: 2) {
                             Text(".mobileprovision Profile")
                                 .font(.system(size: 15, weight: .semibold))
-                            Text(provFileName ?? "Tap to browse provisioning profile")
+                            Text(provFileName ?? "Select or drag .mobileprovision file here")
                                 .font(.system(size: 13))
                                 .foregroundColor(provData == nil ? .secondary : .green)
                         }
@@ -104,6 +151,8 @@ public struct ImportCertificateSheet: View {
                     }
                 } header: {
                     Text("Certificate Files")
+                } footer: {
+                    Text("Tip: On iPad, you can also open Files side-by-side and drag & drop your files directly into this screen.")
                 }
                 
                 Section {
@@ -146,25 +195,18 @@ public struct ImportCertificateSheet: View {
                     .disabled(p12Data == nil || provData == nil || isImporting)
                 }
             }
-            .fileImporter(
-                isPresented: $isShowingPicker,
-                allowedContentTypes: [
-                    .data,
-                    .item,
-                    .content,
-                    UTType(filenameExtension: "p12") ?? .data,
-                    UTType(filenameExtension: "pfx") ?? .data,
-                    UTType(filenameExtension: "mobileprovision") ?? .data,
-                    UTType("com.rsa.pkcs-12") ?? .data,
-                    UTType("com.apple.mobileprovision") ?? .data
-                ],
-                allowsMultipleSelection: true
-            ) { result in
-                if case .success(let urls) = result {
-                    for url in urls {
-                        handlePickedFile(url: url)
+            .sheet(isPresented: $isShowingPicker) {
+                SystemDocumentPicker(
+                    onPick: { urls in
+                        isShowingPicker = false
+                        for url in urls {
+                            handlePickedFile(url: url)
+                        }
+                    },
+                    onCancel: {
+                        isShowingPicker = false
                     }
-                }
+                )
             }
         }
     }
@@ -211,3 +253,62 @@ public struct ImportCertificateSheet: View {
         }
     }
 }
+
+// MARK: - UIKit Document Picker with asCopy: true
+
+public struct SystemDocumentPicker: UIViewControllerRepresentable {
+    public var onPick: ([URL]) -> Void
+    public var onCancel: () -> Void
+    
+    public init(onPick: @escaping ([URL]) -> Void, onCancel: @escaping () -> Void = {}) {
+        self.onPick = onPick
+        self.onCancel = onCancel
+    }
+    
+    public func makeCoordinator() -> Coordinator {
+        Coordinator(self)
+    }
+    
+    public func makeUIViewController(context: Context) -> UIDocumentPickerViewController {
+        var supportedTypes: [UTType] = [.data, .item, .content]
+        if let pkcs = UTType("com.rsa.pkcs-12") {
+            supportedTypes.append(pkcs)
+        }
+        if let p12 = UTType(filenameExtension: "p12") {
+            supportedTypes.append(p12)
+        }
+        if let pfx = UTType(filenameExtension: "pfx") {
+            supportedTypes.append(pfx)
+        }
+        if let prov = UTType(filenameExtension: "mobileprovision") {
+            supportedTypes.append(prov)
+        }
+        if let appleProv = UTType("com.apple.mobileprovision") {
+            supportedTypes.append(appleProv)
+        }
+        
+        let picker = UIDocumentPickerViewController(forOpeningContentTypes: supportedTypes, asCopy: true)
+        picker.allowsMultipleSelection = true
+        picker.delegate = context.coordinator
+        return picker
+    }
+    
+    public func updateUIViewController(_ uiViewController: UIDocumentPickerViewController, context: Context) {}
+    
+    public class Coordinator: NSObject, UIDocumentPickerDelegate {
+        let parent: SystemDocumentPicker
+        
+        init(_ parent: SystemDocumentPicker) {
+            self.parent = parent
+        }
+        
+        public func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+            parent.onPick(urls)
+        }
+        
+        public func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
+            parent.onCancel()
+        }
+    }
+}
+
