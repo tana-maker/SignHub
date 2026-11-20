@@ -81,7 +81,7 @@ public final class SigningService {
             provisioningProfileData: provData,
             options: options
         ) { msg, lvl in
-            log(msg, level: lvl)
+            log(msg, lvl)
         }
         
         // 5. Repack signed IPA archive
