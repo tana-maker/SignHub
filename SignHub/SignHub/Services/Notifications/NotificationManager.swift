@@ -33,7 +33,7 @@ public final class NotificationManager {
         // Remove old notifications
         center.removeAllPendingNotificationRequests()
         
-        let apps = SignedAppsViewModel.shared.installedApps
+        let apps = await SignedAppsViewModel.shared.installedApps
         for app in apps {
             guard !app.isExpired else { continue }
             

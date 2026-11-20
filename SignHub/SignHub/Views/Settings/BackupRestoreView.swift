@@ -20,7 +20,7 @@ public struct BackupRestoreView: View {
     
     public var body: some View {
         Form {
-            Section(header: Text("Export Encrypted Backup")) {
+            Section {
                 SecureField("Backup Encryption Password", text: $passphrase)
                     .autocapitalization(.none)
                 
@@ -30,11 +30,13 @@ public struct BackupRestoreView: View {
                     Label("Create & Export Backup", systemImage: "square.and.arrow.up")
                 }
                 .disabled(passphrase.count < 4)
+            } header: {
+                Text("Export Encrypted Backup")
             } footer: {
                 Text("Backups are encrypted using AES-GCM-256 with your password. Contains all repositories, custom settings, and certificates.")
             }
             
-            Section(header: Text("Restore Backup")) {
+            Section {
                 SecureField("Decryption Password", text: $restorePassphrase)
                     .autocapitalization(.none)
                 
@@ -44,6 +46,8 @@ public struct BackupRestoreView: View {
                     Label("Select .signhubbackup File", systemImage: "arrow.down.doc")
                 }
                 .disabled(restorePassphrase.isEmpty)
+            } header: {
+                Text("Restore Backup")
             }
         }
         .navigationTitle("Backup & Restore")

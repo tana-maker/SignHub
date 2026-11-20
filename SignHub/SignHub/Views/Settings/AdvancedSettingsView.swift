@@ -13,7 +13,7 @@ public struct AdvancedSettingsView: View {
     
     public var body: some View {
         Form {
-            Section(header: Text("Local Server Configuration")) {
+            Section {
                 Stepper(value: $viewModel.localServerPort, in: 1024...65535, step: 1) {
                     HStack {
                         Text("HTTP Port")
@@ -22,18 +22,24 @@ public struct AdvancedSettingsView: View {
                             .foregroundColor(.secondary)
                     }
                 }
+            } header: {
+                Text("Local Server Configuration")
             } footer: {
                 Text("Default is 8088. Change if another service on your device conflicts with this port.")
             }
             
-            Section(header: Text("Temporary Files")) {
+            Section {
                 Toggle("Auto-clean Workspace After Signing", isOn: $viewModel.cleanWorkDirAfterSign)
+            } header: {
+                Text("Temporary Files")
             } footer: {
                 Text("Deletes temporary unpacked payload directories after packaging to conserve device flash storage.")
             }
             
-            Section(header: Text("Background Refresh")) {
+            Section {
                 Toggle("Certificate Expiry Checks", isOn: $viewModel.enablePushNotifications)
+            } header: {
+                Text("Background Refresh")
             } footer: {
                 Text("Uses iOS background task scheduler to verify certificate validity and schedule warning notifications.")
             }

@@ -28,7 +28,7 @@ public struct ImportCertificateSheet: View {
     public var body: some View {
         NavigationStack {
             Form {
-                Section(header: Text("Certificate Files")) {
+                Section {
                     // P12 File Picker
                     HStack {
                         VStack(alignment: .leading, spacing: 2) {
@@ -64,14 +64,18 @@ public struct ImportCertificateSheet: View {
                                 .font(.system(size: 13, weight: .semibold))
                         }
                     }
+                } header: {
+                    Text("Certificate Files")
                 }
                 
-                Section(header: Text("Security & Details")) {
+                Section {
                     SecureField("P12 Password", text: $password)
                         .autocapitalization(.none)
                         .disableAutocorrection(true)
                     
                     TextField("Nickname (Optional)", text: $certName)
+                } header: {
+                    Text("Security & Details")
                 } footer: {
                     Text("Your password is saved securely in the iOS Keychain and never sent to external servers.")
                 }

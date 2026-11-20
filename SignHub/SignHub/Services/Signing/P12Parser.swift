@@ -55,9 +55,14 @@ public final class P12Parser {
             throw P12Error.invalidPasswordOrCorrupt
         }
         
-        guard let identity = firstItem[kSecImportItemIdentity as String] as? SecIdentity else {
+        guard let rawIdentity = firstItem[kSecImportItemIdentity as String] else {
             throw P12Error.noIdentityFound
         }
+        let cfIdentity = rawIdentity as CFTypeRef
+        guard CFGetTypeID(cfIdentity) == SecIdentityGetTypeID() else {
+            throw P12Error.noIdentityFound
+        }
+        let identity = unsafeBitCast(cfIdentity, to: SecIdentity.self)
         
         var certificate: SecCertificate?
         let certStatus = SecIdentityCopyCertificate(identity, &certificate)

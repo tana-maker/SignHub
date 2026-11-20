@@ -28,7 +28,7 @@ public final class SigningService {
         logHandler: @escaping (SigningLogEntry) -> Void
     ) async throws -> URL {
         
-        func log(_ message: String, level: LogLevel = .info) {
+        func log(_ message: String, _ level: LogLevel = .info) {
             logHandler(SigningLogEntry(level: level, message: message))
         }
         

@@ -78,7 +78,7 @@ public struct SigningOptionsView: View {
                     }
                 }
                 .onChange(of: selectedPhotoItem) { newItem in
-                    Task {
+                    Task { @MainActor in
                         if let data = try? await newItem?.loadTransferable(type: Data.self) {
                             viewModel.options.customIconData = data
                         }
