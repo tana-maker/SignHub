@@ -148,7 +148,16 @@ public struct ImportCertificateSheet: View {
             }
             .fileImporter(
                 isPresented: $isShowingPicker,
-                allowedContentTypes: [.item],
+                allowedContentTypes: [
+                    .data,
+                    .item,
+                    .content,
+                    UTType(filenameExtension: "p12") ?? .data,
+                    UTType(filenameExtension: "pfx") ?? .data,
+                    UTType(filenameExtension: "mobileprovision") ?? .data,
+                    UTType("com.rsa.pkcs-12") ?? .data,
+                    UTType("com.apple.mobileprovision") ?? .data
+                ],
                 allowsMultipleSelection: true
             ) { result in
                 if case .success(let urls) = result {
