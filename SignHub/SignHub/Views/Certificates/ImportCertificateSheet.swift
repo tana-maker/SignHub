@@ -25,53 +25,78 @@ public struct ImportCertificateSheet: View {
     @State private var isImporting: Bool = false
     @State private var errorMessage: String?
     
-    private var detectedLocalFiles: (p12: URL?, prov: URL?) {
-        let docs = FileManager.default.documentsDirectory
-        let certsDir = FileManager.default.certificatesDirectory
-        let allURLs = ((try? FileManager.default.contentsOfDirectory(at: docs, includingPropertiesForKeys: nil)) ?? []) +
-                      ((try? FileManager.default.contentsOfDirectory(at: certsDir, includingPropertiesForKeys: nil)) ?? [])
-        
-        let p12 = allURLs.first { ["p12", "pfx"].contains($0.pathExtension.lowercased()) }
-        let prov = allURLs.first { $0.pathExtension.lowercased() == "mobileprovision" }
-        return (p12, prov)
+    private var localFiles: [URL] {
+        let fm = FileManager.default
+        let dirs = [fm.documentsDirectory, fm.certificatesDirectory]
+        var list: [URL] = []
+        for dir in dirs {
+            if let items = try? fm.contentsOfDirectory(at: dir, includingPropertiesForKeys: nil) {
+                for item in items {
+                    var isDir: ObjCBool = false
+                    if fm.fileExists(atPath: item.path, isDirectory: &isDir), !isDir.boolValue {
+                        if !list.contains(where: { $0.lastPathComponent == item.lastPathComponent }) {
+                            list.append(item)
+                        }
+                    }
+                }
+            }
+        }
+        return list
     }
     
     public var body: some View {
         NavigationStack {
             Form {
-                if let p12 = detectedLocalFiles.p12, p12Data == nil || provData == nil {
-                    Section {
-                        Button {
-                            handlePickedFile(url: p12)
-                            if let prov = detectedLocalFiles.prov {
-                                handlePickedFile(url: prov)
-                            }
-                        } label: {
+                // Section 1: In-App Direct File Picker (Bypasses iOS Document Picker entirely)
+                Section {
+                    if localFiles.isEmpty {
+                        VStack(alignment: .leading, spacing: 6) {
                             HStack {
-                                Image(systemName: "sparkles")
-                                    .font(.system(size: 18))
+                                Image(systemName: "folder.badge.questionmark")
+                                    .font(.system(size: 20))
                                     .foregroundColor(.orange)
+                                Text("SignHub Folder (On My iPad)")
+                                    .font(.system(size: 15, weight: .semibold))
+                            }
+                            Text("No certificate files in 'On My iPad > SignHub' yet.\n\nCopy or move your HSBC.p12 and HSBC.mobileprovision into:\n📁 Files app ➔ On My iPad ➔ SignHub\nThey will appear right here with a 1-tap 'Use' button!")
+                                .font(.system(size: 12))
+                                .foregroundColor(.secondary)
+                        }
+                        .padding(.vertical, 4)
+                    } else {
+                        ForEach(localFiles, id: \.self) { file in
+                            let ext = file.pathExtension.lowercased()
+                            let isProv = ext == "mobileprovision"
+                            let isP12 = ["p12", "pfx"].contains(ext)
+                            let isZip = ext == "zip"
+                            let isSelected = isP12 ? (p12FileName == file.lastPathComponent) : (isProv ? (provFileName == file.lastPathComponent) : false)
+                            
+                            HStack {
+                                Image(systemName: isSelected ? "checkmark.circle.fill" : (isP12 ? "doc.badge.key" : (isProv ? "doc.text.fill" : "doc.zipper")))
+                                    .font(.system(size: 18))
+                                    .foregroundColor(isSelected ? .green : appState.currentAccentColor)
+                                
                                 VStack(alignment: .leading, spacing: 2) {
-                                    Text("Auto-Detect in SignHub Folder")
-                                        .font(.system(size: 15, weight: .semibold))
-                                        .foregroundColor(.primary)
-                                    Text("Found: \(p12.lastPathComponent)\(detectedLocalFiles.prov != nil ? " & " + (detectedLocalFiles.prov?.lastPathComponent ?? "") : "")")
-                                        .font(.system(size: 12))
+                                    Text(file.lastPathComponent)
+                                        .font(.system(size: 14, weight: .semibold))
+                                    Text(isP12 ? "Certificate (.p12)" : (isProv ? "Profile (.mobileprovision)" : (isZip ? "ZIP Package (Extracts both)" : ext.uppercased())))
+                                        .font(.caption)
                                         .foregroundColor(.secondary)
                                 }
                                 Spacer()
-                                Text("Auto-Fill")
-                                    .font(.system(size: 13, weight: .bold))
-                                    .foregroundColor(appState.currentAccentColor)
+                                Button(isSelected ? "Selected" : "Use") {
+                                    handlePickedFile(url: file)
+                                }
+                                .font(.system(size: 13, weight: .bold))
+                                .buttonStyle(.borderedProminent)
+                                .tint(isSelected ? .green : appState.currentAccentColor)
                             }
-                            .padding(.vertical, 4)
                         }
-                        .buttonStyle(.borderless)
-                    } header: {
-                        Text("Detected On Device")
-                    } footer: {
-                        Text("You can also copy certificate files into 'Files app > On My iPad > SignHub'.")
                     }
+                } header: {
+                    Text("Direct From SignHub Folder (No Picker Needed)")
+                } footer: {
+                    Text("Files placed in 'On My iPad > SignHub' can be selected directly with zero iOS restrictions.")
                 }
                 
                 Section {
@@ -212,23 +237,74 @@ public struct ImportCertificateSheet: View {
     }
     
     private func handlePickedFile(url: URL) {
-        let _ = url.startAccessingSecurityScopedResource()
-        defer { url.stopAccessingSecurityScopedResource() }
-        guard let data = try? Data(contentsOf: url) else { return }
+        let isSec = url.startAccessingSecurityScopedResource()
+        defer {
+            if isSec {
+                url.stopAccessingSecurityScopedResource()
+            }
+        }
+        
         let ext = url.pathExtension.lowercased()
+        let name = url.lastPathComponent
+        
+        // Handle ZIP Archive
+        if ext == "zip" {
+            let tempDir = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+            try? FileManager.default.createDirectory(at: tempDir, withIntermediateDirectories: true)
+            Task {
+                try? await ZipArchiveService.shared.unzip(archiveAt: url, to: tempDir)
+                if let subpaths = try? FileManager.default.subpathsOfDirectory(atPath: tempDir.path) {
+                    for sub in subpaths {
+                        let subURL = tempDir.appendingPathComponent(sub)
+                        let subExt = subURL.pathExtension.lowercased()
+                        if ["p12", "pfx"].contains(subExt) {
+                            if let d = try? Data(contentsOf: subURL) {
+                                await MainActor.run {
+                                    self.p12Data = d
+                                    self.p12FileName = subURL.lastPathComponent
+                                }
+                            }
+                        } else if subExt == "mobileprovision" {
+                            if let d = try? Data(contentsOf: subURL) {
+                                await MainActor.run {
+                                    self.provData = d
+                                    self.provFileName = subURL.lastPathComponent
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return
+        }
+        
+        // Coordinated read fallback
+        var fileData = try? Data(contentsOf: url)
+        if fileData == nil {
+            let coordinator = NSFileCoordinator()
+            coordinator.coordinate(readingItemAt: url, options: .withoutChanges, error: nil) { readURL in
+                fileData = try? Data(contentsOf: readURL)
+            }
+        }
+        
+        guard let data = fileData else {
+            self.errorMessage = "Could not read file: \(name)"
+            return
+        }
+        
         if ext == "p12" || ext == "pfx" {
             self.p12Data = data
-            self.p12FileName = url.lastPathComponent
+            self.p12FileName = name
         } else if ext == "mobileprovision" {
             self.provData = data
-            self.provFileName = url.lastPathComponent
+            self.provFileName = name
         } else {
-            if url.lastPathComponent.lowercased().contains("provision") {
+            if name.lowercased().contains("provision") {
                 self.provData = data
-                self.provFileName = url.lastPathComponent
+                self.provFileName = name
             } else {
                 self.p12Data = data
-                self.p12FileName = url.lastPathComponent
+                self.p12FileName = name
             }
         }
     }
@@ -270,24 +346,15 @@ public struct SystemDocumentPicker: UIViewControllerRepresentable {
     }
     
     public func makeUIViewController(context: Context) -> UIDocumentPickerViewController {
-        var supportedTypes: [UTType] = [.data, .item, .content]
-        if let pkcs = UTType("com.rsa.pkcs-12") {
-            supportedTypes.append(pkcs)
-        }
-        if let p12 = UTType(filenameExtension: "p12") {
-            supportedTypes.append(p12)
-        }
-        if let pfx = UTType(filenameExtension: "pfx") {
-            supportedTypes.append(pfx)
-        }
-        if let prov = UTType(filenameExtension: "mobileprovision") {
-            supportedTypes.append(prov)
-        }
-        if let appleProv = UTType("com.apple.mobileprovision") {
-            supportedTypes.append(appleProv)
-        }
-        
-        let picker = UIDocumentPickerViewController(forOpeningContentTypes: supportedTypes, asCopy: true)
+        let types = [
+            "public.data",
+            "public.item",
+            "public.content",
+            "com.rsa.pkcs-12",
+            "com.apple.mobileprovision",
+            "public.zip-archive"
+        ]
+        let picker = UIDocumentPickerViewController(documentTypes: types, in: .import)
         picker.allowsMultipleSelection = true
         picker.delegate = context.coordinator
         return picker
