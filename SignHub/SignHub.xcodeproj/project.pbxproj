@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A6A186FC4009D66463DDB7DB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C805C418B9E1E2711FEFF58B /* Assets.xcassets */; };
 		E3A6DD769E67DFE0C5C65EA8 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF97199539089EF6025F2B0 /* AppState.swift */; };
 		BC8BF5DBAD63025BEF195668 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35B293A13353ECC31A73F39E /* RootView.swift */; };
 		0AC0956BD5E3F85A5FB64CF9 /* SidebarNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F2CDD05D5320EA26067FA3E /* SidebarNavigation.swift */; };
@@ -110,6 +109,7 @@
 		DF4F9F1B5962D9F94C8B97BF /* ProvisioningParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D377D96005B14E6FBE82AD3 /* ProvisioningParserTests.swift */; };
 		34BE63C2363F55F37212656E /* SigningServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2ACF887EFF2B4E4E9A711AC /* SigningServiceTests.swift */; };
 		A253116710F3E880E320669F /* SourceParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 358C62B7245B1D4F5ABC98E4 /* SourceParserTests.swift */; };
+		A6A186FC4009D66463DDB7DB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C805C418B9E1E2711FEFF58B /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -123,7 +123,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		C805C418B9E1E2711FEFF58B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1AF97199539089EF6025F2B0 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppState.swift"; sourceTree = "<group>"; };
 		35B293A13353ECC31A73F39E /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RootView.swift"; sourceTree = "<group>"; };
 		6F2CDD05D5320EA26067FA3E /* SidebarNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SidebarNavigation.swift"; sourceTree = "<group>"; };
@@ -143,6 +142,12 @@
 		234484EB8FB9613865356D2F /* SignHub-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SignHub-Bridging-Header.h"; sourceTree = "<group>"; };
 		E202BED3CEDC50E0E45F9932 /* SignHub.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "SignHub.entitlements"; sourceTree = "<group>"; };
 		0B8C2EEC46745B108366D2D6 /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = "Localizable.strings"; sourceTree = "<group>"; };
+		F7794AB6DB245DA745D8A3AD /* Contents.json */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Contents.json"; sourceTree = "<group>"; };
+		5394B7F792273A8BE98A857D /* Contents.json */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Contents.json"; sourceTree = "<group>"; };
+		EBAC5BBE238EC0308B6BF6E0 /* Contents.json */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Contents.json"; sourceTree = "<group>"; };
+		4E874EF4CA36CC33C4681C2B /* Contents.json */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Contents.json"; sourceTree = "<group>"; };
+		F0F20D75FFE2F51F0290970D /* Contents.json */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Contents.json"; sourceTree = "<group>"; };
+		241D810711919008F907FC94 /* Contents.json */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Contents.json"; sourceTree = "<group>"; };
 		A2A34373516E7F7BD06BC1B2 /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = "Localizable.strings"; sourceTree = "<group>"; };
 		50D90CDA40F8FF32F1AD5AC6 /* BiometricAuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BiometricAuthService.swift"; sourceTree = "<group>"; };
 		84BFAB13C22E90ABD37B124D /* BackgroundDownloadDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BackgroundDownloadDelegate.swift"; sourceTree = "<group>"; };
@@ -231,6 +236,7 @@
 		7D377D96005B14E6FBE82AD3 /* ProvisioningParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProvisioningParserTests.swift"; sourceTree = "<group>"; };
 		A2ACF887EFF2B4E4E9A711AC /* SigningServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SigningServiceTests.swift"; sourceTree = "<group>"; };
 		358C62B7245B1D4F5ABC98E4 /* SourceParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SourceParserTests.swift"; sourceTree = "<group>"; };
+		C805C418B9E1E2711FEFF58B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Assets.xcassets"; sourceTree = "<group>"; };
 		8BEFD367C4AB92E0F59B0B1F /* SignHub.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SignHub.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		02AC43A08A4599D8442B24FA /* SignHubTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SignHubTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -271,6 +277,20 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		9076B0C8BAF827C9B2655DFB /* SignHub */ = {
+			isa = PBXGroup;
+			children = (
+				9E0B0BF8F93E3A40C993DE12 /* App */,
+				DA04E2A707651702D55CBB75 /* Models */,
+				D1099A634C6FA18AE17F3D08 /* Resources */,
+				DCFC5E7A7FC76C51B5231CA8 /* Services */,
+				9F887FE4D490C2556CAC7AE9 /* Utilities */,
+				A2A5FB511B70EF2C0AF69EC2 /* ViewModels */,
+				556B473C38AF8D730A3C1558 /* Views */,
+			);
+			path = "SignHub";
+			sourceTree = "<group>";
+		};
 		9E0B0BF8F93E3A40C993DE12 /* App */ = {
 			isa = PBXGroup;
 			children = (
@@ -291,8 +311,8 @@
 				E2BE3577899B985CB33BAC97 /* CertificateModel.swift */,
 				7E90021BA7DE28181DCC18DC /* DownloadItem.swift */,
 				5BE28A96EC6AB96A56FA4FC6 /* FileItem.swift */,
-				8B00E2B91CBC781B6F70CFEF /* InstalledAppModel.swift */,
 				2BAABB32D9840AB665C63DEF /* IPAMetadata.swift */,
+				8B00E2B91CBC781B6F70CFEF /* InstalledAppModel.swift */,
 				DB7DCB1866CF3B966A29625B /* SigningLogEntry.swift */,
 				4EC18DF58CA080F8F1122A74 /* SigningOptions.swift */,
 				569BF3D743376505D1022ED6 /* SourceModel.swift */,
@@ -303,14 +323,67 @@
 		D1099A634C6FA18AE17F3D08 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				C805C418B9E1E2711FEFF58B /* Assets.xcassets */,
+				4760B748C0546A660F0CD218 /* Assets.xcassets */,
 				FC6F0B4049A3F56561CAED73 /* ar.lproj */,
 				D343E2F8A42A9C38BCCD1E09 /* en.lproj */,
 				5AD97A436B2BC1C87DD3F6E9 /* Info.plist */,
 				234484EB8FB9613865356D2F /* SignHub-Bridging-Header.h */,
 				E202BED3CEDC50E0E45F9932 /* SignHub.entitlements */,
+				C805C418B9E1E2711FEFF58B /* Assets.xcassets */,
 			);
 			path = "Resources";
+			sourceTree = "<group>";
+		};
+		4760B748C0546A660F0CD218 /* Assets.xcassets */ = {
+			isa = PBXGroup;
+			children = (
+				D4C82DD6AE1D2E1F5EFF7B23 /* AccentColor.colorset */,
+				AB892280DC965858827422A1 /* AppBackground.colorset */,
+				A4C48F59A4595F0E9F4D82D6 /* AppCardBackground.colorset */,
+				E468ADCDD21F9C251BC43184 /* AppIcon.appiconset */,
+				672B322CFD63A484D130B7D7 /* AppSecondaryBackground.colorset */,
+			);
+			path = "Assets.xcassets";
+			sourceTree = "<group>";
+		};
+		D4C82DD6AE1D2E1F5EFF7B23 /* AccentColor.colorset */ = {
+			isa = PBXGroup;
+			children = (
+
+			);
+			path = "AccentColor.colorset";
+			sourceTree = "<group>";
+		};
+		AB892280DC965858827422A1 /* AppBackground.colorset */ = {
+			isa = PBXGroup;
+			children = (
+
+			);
+			path = "AppBackground.colorset";
+			sourceTree = "<group>";
+		};
+		A4C48F59A4595F0E9F4D82D6 /* AppCardBackground.colorset */ = {
+			isa = PBXGroup;
+			children = (
+
+			);
+			path = "AppCardBackground.colorset";
+			sourceTree = "<group>";
+		};
+		E468ADCDD21F9C251BC43184 /* AppIcon.appiconset */ = {
+			isa = PBXGroup;
+			children = (
+
+			);
+			path = "AppIcon.appiconset";
+			sourceTree = "<group>";
+		};
+		672B322CFD63A484D130B7D7 /* AppSecondaryBackground.colorset */ = {
+			isa = PBXGroup;
+			children = (
+
+			);
+			path = "AppSecondaryBackground.colorset";
 			sourceTree = "<group>";
 		};
 		FC6F0B4049A3F56561CAED73 /* ar.lproj */ = {
@@ -327,6 +400,21 @@
 				A2A34373516E7F7BD06BC1B2 /* Localizable.strings */,
 			);
 			path = "en.lproj";
+			sourceTree = "<group>";
+		};
+		DCFC5E7A7FC76C51B5231CA8 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				E0B203C12391F6AB82F3D835 /* Biometrics */,
+				BB0DC8D77BB78D9E181DEA17 /* Downloads */,
+				820351963D73A171ED415369 /* Installation */,
+				11B1437343CF8BA3D7C446AA /* Logging */,
+				E3FEC9CBB0DC4BA74DE942BA /* Notifications */,
+				5FF1899E920A3501F037E2AF /* Signing */,
+				22E98AA3E58E4132937101C8 /* Sources */,
+				FC979B758899C45083B75B40 /* Storage */,
+			);
+			path = "Services";
 			sourceTree = "<group>";
 		};
 		E0B203C12391F6AB82F3D835 /* Biometrics */ = {
@@ -411,6 +499,17 @@
 			path = "Storage";
 			sourceTree = "<group>";
 		};
+		9F887FE4D490C2556CAC7AE9 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				0DFD6FD983AA5B667AF12A4B /* Extensions */,
+				08D4D50F3574DF4023D7ED9D /* Haptics */,
+				802ED00B554BEC678022F38B /* Localization */,
+				4F2CC7AB6479140CCCA6C41A /* Zip */,
+			);
+			path = "Utilities";
+			sourceTree = "<group>";
+		};
 		0DFD6FD983AA5B667AF12A4B /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -461,6 +560,23 @@
 				2D2EA6B376ABF690AFDFFCE0 /* SourcesViewModel.swift */,
 			);
 			path = "ViewModels";
+			sourceTree = "<group>";
+		};
+		556B473C38AF8D730A3C1558 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				EB48B6AAE5410CED7CA8E32D /* Apps */,
+				BB5CBF03DC40F68380BFFE1A /* Certificates */,
+				AFCE20DC69C9D3EF4809570B /* Components */,
+				AA89BAF14CA5A35909483706 /* Downloads */,
+				A33213904FA905981276974B /* Files */,
+				92C26CC0004775EBED56997A /* Install */,
+				DEF11FD02DCDEA0FEF534C93 /* Settings */,
+				1A6928731740985ED20E0161 /* SignedApps */,
+				562784FC3656A5D7E70311A4 /* Signing */,
+				030E8BD5150BB7FAF4CF278A /* Sources */,
+			);
+			path = "Views";
 			sourceTree = "<group>";
 		};
 		EB48B6AAE5410CED7CA8E32D /* Apps */ = {
@@ -666,9 +782,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A6A186FC4009D66463DDB7DB /* Assets.xcassets in Resources */,
 				14A1ED7879D218FEC220B97F /* in Resources */,
 				A721DFC8295AB36D782EDC2A /* in Resources */,
+				A6A186FC4009D66463DDB7DB /* in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -861,7 +977,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "SignHub/Resources/SignHub.entitlements";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = NO;
@@ -885,7 +1001,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "SignHub/Resources/SignHub.entitlements";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = NO;
@@ -908,7 +1024,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
@@ -924,7 +1040,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
