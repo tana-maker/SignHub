@@ -20,6 +20,7 @@ public struct ImportCertificateSheet: View {
     @State private var provFileName: String?
     @State private var provData: Data?
     
+    @State private var isShowingPairPicker: Bool = false
     @State private var isShowingP12Picker: Bool = false
     @State private var isShowingProvPicker: Bool = false
     @State private var isImporting: Bool = false
@@ -29,6 +30,22 @@ public struct ImportCertificateSheet: View {
         NavigationStack {
             Form {
                 Section {
+                    // Quick Import Both Pair
+                    Button {
+                        isShowingPairPicker = true
+                    } label: {
+                        HStack {
+                            Image(systemName: "square.and.arrow.down.on.square.fill")
+                                .foregroundColor(appState.currentAccentColor)
+                            Text("Select Both Files Together (.p12 & .mobileprovision)")
+                                .font(.system(size: 14, weight: .semibold))
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                    }
+                    
                     // P12 File Picker
                     HStack {
                         VStack(alignment: .leading, spacing: 2) {
@@ -109,16 +126,22 @@ public struct ImportCertificateSheet: View {
                 }
             }
             .fileImporter(
+                isPresented: $isShowingPairPicker,
+                allowedContentTypes: [.item],
+                allowsMultipleSelection: true
+            ) { result in
+                if case .success(let urls) = result {
+                    for url in urls {
+                        handlePickedFile(url: url)
+                    }
+                }
+            }
+            .fileImporter(
                 isPresented: $isShowingP12Picker,
                 allowedContentTypes: [.item]
             ) { result in
                 if case .success(let url) = result {
-                    let _ = url.startAccessingSecurityScopedResource()
-                    defer { url.stopAccessingSecurityScopedResource() }
-                    if let data = try? Data(contentsOf: url) {
-                        self.p12Data = data
-                        self.p12FileName = url.lastPathComponent
-                    }
+                    handlePickedFile(url: url)
                 }
             }
             .fileImporter(
@@ -126,13 +149,30 @@ public struct ImportCertificateSheet: View {
                 allowedContentTypes: [.item]
             ) { result in
                 if case .success(let url) = result {
-                    let _ = url.startAccessingSecurityScopedResource()
-                    defer { url.stopAccessingSecurityScopedResource() }
-                    if let data = try? Data(contentsOf: url) {
-                        self.provData = data
-                        self.provFileName = url.lastPathComponent
-                    }
+                    handlePickedFile(url: url)
                 }
+            }
+        }
+    }
+    
+    private func handlePickedFile(url: URL) {
+        let _ = url.startAccessingSecurityScopedResource()
+        defer { url.stopAccessingSecurityScopedResource() }
+        guard let data = try? Data(contentsOf: url) else { return }
+        let ext = url.pathExtension.lowercased()
+        if ext == "p12" || ext == "pfx" {
+            self.p12Data = data
+            self.p12FileName = url.lastPathComponent
+        } else if ext == "mobileprovision" {
+            self.provData = data
+            self.provFileName = url.lastPathComponent
+        } else {
+            if url.lastPathComponent.lowercased().contains("provision") {
+                self.provData = data
+                self.provFileName = url.lastPathComponent
+            } else {
+                self.p12Data = data
+                self.p12FileName = url.lastPathComponent
             }
         }
     }
